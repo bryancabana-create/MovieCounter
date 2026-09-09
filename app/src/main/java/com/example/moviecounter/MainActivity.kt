@@ -1,5 +1,6 @@
 package com.example.moviecounter
 
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import android.os.Bundle
@@ -38,8 +39,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MovieCounter(modifier: Modifier = Modifier) {
-    var count by remember { mutableStateOf(0) }
-    var movieName by remember { mutableStateOf("") }  // Estado para el nombre
+    // Cambiar remember por rememberSaveable
+    var count by rememberSaveable { mutableStateOf(0) }
+    var movieName by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = modifier.padding(16.dp),
@@ -48,7 +50,6 @@ fun MovieCounter(modifier: Modifier = Modifier) {
         Text(text = "You have added $count movies.")
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo de texto para ingresar nombre
         TextField(
             value = movieName,
             onValueChange = { movieName = it },
@@ -60,7 +61,7 @@ fun MovieCounter(modifier: Modifier = Modifier) {
         Button(onClick = {
             if (movieName.isNotBlank()) {
                 count++
-                movieName = ""  // Limpia el campo
+                movieName = ""
             }
         }) {
             Text("Add Movie")
