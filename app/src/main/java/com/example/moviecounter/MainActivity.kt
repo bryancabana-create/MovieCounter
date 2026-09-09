@@ -1,8 +1,5 @@
 package com.example.moviecounter
 
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,7 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MovieCounterTheme {
-                // LLAMADA CORRECTA A MovieCounter
+                // Llamada a la función principal
                 MovieCounter()
             }
         }
@@ -39,36 +39,50 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MovieCounter(modifier: Modifier = Modifier) {
-    // Cambiar remember por rememberSaveable
+    // Estado del contador (persiste al rotar pantalla)
     var count by rememberSaveable { mutableStateOf(0) }
+
+    // Estado del nombre de la película (persiste al rotar pantalla)
     var movieName by rememberSaveable { mutableStateOf("") }
 
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "You have added $count movies.")
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TextField(
-            value = movieName,
-            onValueChange = { movieName = it },
-            label = { Text("Movie Name") }
+        // Texto que muestra el contador
+        Text(
+            text = "You have added $count movies."
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = {
-            if (movieName.isNotBlank()) {
-                count++
-                movieName = ""
+        // Campo de texto para ingresar el nombre de la película
+        TextField(
+            value = movieName,
+            onValueChange = { movieName = it },
+            label = { Text("Movie Name") },
+            singleLine = true
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botón para agregar película
+        Button(
+            onClick = {
+                if (movieName.isNotBlank()) {
+                    count++  // Incrementa el contador
+                    movieName = ""  // Limpia el campo de texto
+                }
             }
-        }) {
+        ) {
             Text("Add Movie")
         }
     }
 }
-// PREVIEW CORRECTO
+
+// Preview para visualizar en Android Studio
 @Preview(showBackground = true)
 @Composable
 fun PreviewMovieCounter() {
